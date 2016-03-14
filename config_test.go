@@ -11,6 +11,9 @@ func TestInstanceName(t *testing.T) {
 	n.Init()
 
 	servers, _ := n.listServers()
+	if len(servers) == 0 {
+		t.Skipf("No servers found. Skip this test.")
+	}
 	m, _ := newMachine(servers[0])
 
 	configTestInstance = m
@@ -20,6 +23,10 @@ func TestInstanceName(t *testing.T) {
 
 // Only instance name in the arguments.
 func TestParseArgs1(t *testing.T) {
+	if configTestInstance == nil {
+		t.Skipf("No servers found. Skip this test.")
+	}
+
 	c := &Config{}
 
 	args := []string{
@@ -47,6 +54,10 @@ func TestParseArgs1(t *testing.T) {
 
 // Instance name with user in the arguments.
 func TestParseArgs2(t *testing.T) {
+	if configTestInstance == nil {
+		t.Skipf("No servers found. Skip this test.")
+	}
+
 	c := &Config{}
 
 	args := []string{
@@ -74,6 +85,10 @@ func TestParseArgs2(t *testing.T) {
 
 // Instance name with user and remote commands in the arguments
 func TestParseArgs3(t *testing.T) {
+	if configTestInstance == nil {
+		t.Skipf("No servers found. Skip this test.")
+	}
+
 	c := &Config{}
 
 	args := []string{
@@ -102,6 +117,10 @@ func TestParseArgs3(t *testing.T) {
 
 // With SSH options
 func TestParseArgs4(t *testing.T) {
+	if configTestInstance == nil {
+		t.Skipf("No servers found. Skip this test.")
+	}
+
 	c := &Config{}
 
 	args := []string{
