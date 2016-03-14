@@ -32,9 +32,16 @@ type Config struct {
 }
 
 func (c *Config) ParseArgs(args []string) (exitWithHelp bool, err error) {
-	sshargs := []string{}
+	// Environments
+	if os.Getenv("NOVASSH_COMMAND") != "" {
+		c.SshCommand = os.Getenv("NOVASSH_COMMAND")
+	}
 
-	for _, arg := range args {
+	// Aeguments
+	i := 0
+	sshargs := []string{}
+	for i < len(args) {
+		arg := args[i]
 		if arg == "--novassh-debug" {
 			// Enable debug
 			log.SetLevel(log.DebugLevel)
@@ -42,7 +49,8 @@ func (c *Config) ParseArgs(args []string) (exitWithHelp bool, err error) {
 
 		} else if arg == "--novassh-command" {
 			// Detects SSH command
-			c.SshCommand = arg
+			i++
+			c.SshCommand = args[i]
 
 		} else if arg == "--help" {
 			sshargs = []string{}
@@ -51,6 +59,7 @@ func (c *Config) ParseArgs(args []string) (exitWithHelp bool, err error) {
 		} else {
 			sshargs = append(sshargs, arg)
 		}
+		i++
 	}
 
 	// Set default SSH command if not set
@@ -144,8 +153,12 @@ VERSION:
 	%s
 
 OPTIONS:
-	--novassh-debug: output some debug messages
-	--help:          print this message
+	--novassh-command: Specify SSH command (default: "ssh").
+	--novassh-debug:   output some debug messages.
+	--help:            print this message.
+
+ENVIRONMENTS:
+	NOVASSH_COMMAND: Specify SSH command (default: "ssh").
 
 `, APPNAME, APPNAME, VERSION)
 }
