@@ -1,6 +1,13 @@
 package main
 
-import "testing"
+import (
+	"encoding/json"
+	"io/ioutil"
+	"os"
+	"testing"
+
+	"github.com/rackspace/gophercloud/openstack/identity/v2/tokens"
+)
 
 func TestNewNova(t *testing.T) {
 	n := NewNova()
@@ -9,40 +16,40 @@ func TestNewNova(t *testing.T) {
 	}
 }
 
-// func TestInitAndCache(t *testing.T) {
-// 	var err error
-// 	n := NewNova()
+func TestInitAndCache(t *testing.T) {
+	var err error
+	n := NewNova()
 
-// 	// Remove credential cache file
-// 	os.Remove(n.credentialCachePath())
+	// Remove credential cache file
+	os.Remove(n.credentialCachePath())
 
-// 	// Init
-// 	if err = n.Init(); err != nil {
-// 		t.Errorf("%v", err)
-// 	}
+	// Init
+	if err = n.Init(); err != nil {
+		t.Errorf("%v", err)
+	}
 
-// 	// Verify credential cache file
-// 	_, err = os.Stat(n.credentialCachePath())
-// 	if err != nil {
-// 		t.Errorf("%v", err)
-// 	}
+	// Verify credential cache file
+	_, err = os.Stat(n.credentialCachePath())
+	if err != nil {
+		t.Errorf("%v", err)
+	}
 
-// 	strdata, err := ioutil.ReadFile(n.credentialCachePath())
-// 	cred := &Credential{Token: &tokens.Token{}}
-// 	if err = json.Unmarshal(strdata, cred); err != nil {
-// 		t.Errorf("%v", err)
-// 	}
-// }
+	strdata, err := ioutil.ReadFile(n.credentialCachePath())
+	cred := &Credential{Token: &tokens.Token{}}
+	if err = json.Unmarshal(strdata, cred); err != nil {
+		t.Errorf("%v", err)
+	}
+}
 
-// func TestInitAndCache2(t *testing.T) {
-// 	// NOTE: Credential cache file has already created by previous test
-// 	n := NewNova()
+func TestInitAndCache2(t *testing.T) {
+	// NOTE: Credential cache file has already created by previous test
+	n := NewNova()
 
-// 	// Init() uses it instead of authenticating
-// 	if err := n.Init(); err != nil {
-// 		t.Errorf("%v", err)
-// 	}
-// }
+	// Init() uses it instead of authenticating
+	if err := n.Init(); err != nil {
+		t.Errorf("%v", err)
+	}
+}
 
 func TestFind(t *testing.T) {
 	n := NewNova()
