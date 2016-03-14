@@ -11,7 +11,7 @@ import (
 
 func TestNewNova(t *testing.T) {
 	n := NewNova()
-	if n.servers != nil {
+	if n.machines != nil {
 		t.Errorf("'servers' attribute is not nil")
 	}
 }
@@ -55,24 +55,19 @@ func TestFind(t *testing.T) {
 	n := NewNova()
 	n.Init()
 
-	servers, err := n.listServers()
+	machines, err := n.listMachines()
 	if err != nil {
 		t.Errorf("%v", err)
 
-	} else if len(servers) == 0 {
+	} else if len(machines) == 0 {
 		t.Skipf("Skip beause no servers found")
 	}
 
-	s, err := newMachine(servers[0])
-	if err != nil {
-		t.Errorf("%v", err)
-	}
-
-	ss, err := n.Find(s.Name)
+	ss, err := n.Find(machines[0].Name)
 	if err != nil {
 		t.Errorf("%v", err)
 
-	} else if ss == nil || ss.Name != s.Name {
-		t.Errorf("Find() did not return the server: name=%s", s.Name)
+	} else if ss == nil || ss.Name != machines[0].Name {
+		t.Errorf("Find() did not return the server: name=%s", machines[0].Name)
 	}
 }

@@ -72,7 +72,7 @@ func newMachine(s servers.Server) (*machine, error) {
 }
 
 type nova struct {
-	servers  []servers.Server
+	machines []*machine
 	provider *gophercloud.ServiceClient
 }
 
@@ -83,7 +83,7 @@ type Credential struct {
 
 func NewNova() *nova {
 	nova := &nova{
-		servers: nil,
+		machines: nil,
 	}
 	return nova
 }
@@ -164,44 +164,46 @@ AUTH:
 }
 
 func (n *nova) Find(name string) (m *machine, err error) {
-	if n.servers == nil {
-		n.servers, err = n.listServers()
+	if n.machines == nil {
+		n.machines, err = n.listMachines()
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	// For Rackspace or other OpenStack systems
-	for _, server := range n.servers {
-		if server.Name == name {
-			return newMachine(server)
+	for _, machine := range n.machines {
+		if machine.Name == name {
+			return machine, nil
 		}
 	}
 
-	//  For ConoHa
-	for _, server := range n.servers {
-		instanceName, ok := server.Metadata["instance_name_tag"].(string)
-		if ok && instanceName == name {
-			return newMachine(server)
-		}
-	}
 	return nil, nil
 }
 
-func (n *nova) listServers() ([]servers.Server, error) {
+func (n *nova) listMachines() ([]*machine, error) {
 	pager := servers.List(n.provider, servers.ListOpts{})
 
-	ss := []servers.Server{}
+	machines := []*machine{}
 	pager.EachPage(func(page pagination.Page) (bool, error) {
-		sss, err := servers.ExtractServers(page)
+		ss, err := servers.ExtractServers(page)
 		if err != nil {
 			return false, err
 		}
-		ss = append(ss, sss...)
+
+		for _, s := range ss {
+			m, err := newMachine(s)
+			if err != nil {
+				return false, err
+			}
+			log.Debugf("Machine is found: name=%s, ipaddr=%s", m.Name, m.Ipaddr)
+
+			machines = append(machines, m)
+		}
+
 		return true, nil
 	})
 
-	return ss, nil
+	return machines, nil
 }
 
 func (n *nova) credentialCachePath() string {

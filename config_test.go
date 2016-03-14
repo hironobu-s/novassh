@@ -10,13 +10,12 @@ func TestInstanceName(t *testing.T) {
 	n := NewNova()
 	n.Init()
 
-	servers, _ := n.listServers()
-	if len(servers) == 0 {
-		t.Skipf("No servers found. Skip this test.")
+	machines, _ := n.listMachines()
+	if len(machines) == 0 {
+		t.Skipf("No machines found. Skip this test.")
 	}
-	m, _ := newMachine(servers[0])
 
-	configTestInstance = m
+	configTestInstance = machines[0]
 }
 
 // ---------------------------------------
