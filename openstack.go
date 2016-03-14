@@ -88,6 +88,9 @@ func NewNova() *nova {
 func (n *nova) Init() (err error) {
 	// Credentials from env
 	opts, err := openstack.AuthOptionsFromEnv()
+	if err != nil {
+		return err
+	}
 
 	// Endpoint options
 	eo := gophercloud.EndpointOpts{
