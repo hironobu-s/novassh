@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/mitchellh/go-homedir"
 	"github.com/rackspace/gophercloud"
 	"github.com/rackspace/gophercloud/openstack"
 	"github.com/rackspace/gophercloud/openstack/compute/v2/servers"
@@ -17,7 +19,7 @@ import (
 )
 
 const (
-	CREDENTIAL_FILE      = "credential.dat"
+	CREDENTIAL_FILE      = ".novassh"
 	CREDENTIAL_FILE_MODE = 0600
 )
 
@@ -99,10 +101,10 @@ func (n *nova) Init() (err error) {
 	}
 
 	// Try to use cached credential if file exists.
-	_, err = os.Stat(CREDENTIAL_FILE)
+	_, err = os.Stat(n.credentialCachePath())
 	if err == nil {
 		// Use cache file
-		strdata, err := ioutil.ReadFile(CREDENTIAL_FILE)
+		strdata, err := ioutil.ReadFile(n.credentialCachePath())
 		if err != nil {
 			log.Warnf("Failed to load cache file: %v", err)
 			goto AUTH
@@ -121,7 +123,7 @@ func (n *nova) Init() (err error) {
 
 		client, err := openstack.NewClient(opts.IdentityEndpoint)
 		client.EndpointLocator = func(o gophercloud.EndpointOpts) (string, error) {
-			return "https://compute.tyo1.conoha.io/v2/6150e7c42bab40c59db53d415629841f/", nil
+			return e, nil
 		}
 		client.TokenID = cred.ID
 
@@ -149,8 +151,8 @@ AUTH:
 		return err
 	}
 
-	if err = ioutil.WriteFile(CREDENTIAL_FILE, strdata, CREDENTIAL_FILE_MODE); err != nil {
-		log.Warnf("Can not write the credential cache file: %s", CREDENTIAL_FILE)
+	if err = ioutil.WriteFile(n.credentialCachePath(), strdata, CREDENTIAL_FILE_MODE); err != nil {
+		log.Warnf("Can not write the credential cache file: %s", n.credentialCachePath())
 	}
 
 	// Set service client
@@ -197,4 +199,13 @@ func (n *nova) listServers() ([]servers.Server, error) {
 	})
 
 	return ss, nil
+}
+
+func (n *nova) credentialCachePath() string {
+	d, err := homedir.Dir()
+	if err == nil {
+		return fmt.Sprintf("%s%c%s", d, filepath.Separator, CREDENTIAL_FILE)
+	} else {
+		return CREDENTIAL_FILE
+	}
 }
