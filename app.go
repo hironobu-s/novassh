@@ -7,14 +7,18 @@ import (
 )
 
 func main() {
-	log.SetLevel(log.DebugLevel)
-	enableDebugTransport()
+	var err error
 
-	ssh := &SshWrapper{
-		SshCommand: "ssh",
-	}
-	if err := ssh.ParseArgs(os.Args[1:]); err != nil {
+	c := Config{}
+	exitWithHelp, err := c.ParseArgs(os.Args[1:])
+
+	if exitWithHelp {
+		os.Exit(0)
+
+	} else if err != nil {
 		log.Errorf("%v", err)
 	}
+
+	ssh := &Ssh{config: c}
 	ssh.Run()
 }

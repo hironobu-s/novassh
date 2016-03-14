@@ -1,14 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"strings"
-
-	"io/ioutil"
-
-	"encoding/json"
-
 	"time"
 
 	log "github.com/Sirupsen/logrus"
