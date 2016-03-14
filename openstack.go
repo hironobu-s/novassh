@@ -28,7 +28,7 @@ type machine struct {
 	Ipaddr string
 }
 
-func newMechine(s servers.Server) (*machine, error) {
+func newMachine(s servers.Server) (*machine, error) {
 	m := &machine{
 		Name: s.Name,
 	}
@@ -174,7 +174,7 @@ func (n *nova) Find(name string) (m *machine, err error) {
 	// For Rackspace or other OpenStack systems
 	for _, server := range n.servers {
 		if server.Name == name {
-			return newMechine(server)
+			return newMachine(server)
 		}
 	}
 
@@ -182,7 +182,7 @@ func (n *nova) Find(name string) (m *machine, err error) {
 	for _, server := range n.servers {
 		instanceName, ok := server.Metadata["instance_name_tag"].(string)
 		if ok && instanceName == name {
-			return newMechine(server)
+			return newMachine(server)
 		}
 	}
 	return nil, nil
