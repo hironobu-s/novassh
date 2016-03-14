@@ -17,6 +17,7 @@ func main() {
 
 	} else if err != nil {
 		log.Errorf("%v", err)
+		os.Exit(1)
 	}
 
 	ssh := &Ssh{config: c}
