@@ -77,6 +77,7 @@ type nova struct {
 }
 
 type Credential struct {
+	ComputeEndpoint string
 	*tokens.Token
 }
 
@@ -123,7 +124,7 @@ func (n *nova) Init() (err error) {
 
 		client, err := openstack.NewClient(opts.IdentityEndpoint)
 		client.EndpointLocator = func(o gophercloud.EndpointOpts) (string, error) {
-			return e, nil
+			return cred.ComputeEndpoint, nil
 		}
 		client.TokenID = cred.ID
 
@@ -139,8 +140,12 @@ AUTH:
 		return err
 	}
 
+	// Set service client
+	n.provider, err = openstack.NewComputeV2(client, eo)
+
 	// Store credential to cache file
 	cred := &Credential{
+		ComputeEndpoint: n.provider.Endpoint,
 		Token: &tokens.Token{
 			ID:        client.TokenID,
 			ExpiresAt: time.Now(),
@@ -155,8 +160,6 @@ AUTH:
 		log.Warnf("Can not write the credential cache file: %s", n.credentialCachePath())
 	}
 
-	// Set service client
-	n.provider, err = openstack.NewComputeV2(client, eo)
 	return nil
 }
 
