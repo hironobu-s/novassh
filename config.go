@@ -14,6 +14,13 @@ const (
 	VERSION             = "0.1"
 )
 
+// Commands
+const (
+	CMD_HELP = iota + 1
+	CMD_LIST
+	CMD_SSH
+)
+
 type Config struct {
 	// Executable name of SSH
 	SshCommand string
@@ -31,7 +38,7 @@ type Config struct {
 	SshRemoteCommand string
 }
 
-func (c *Config) ParseArgs(args []string) (exitWithHelp bool, err error) {
+func (c *Config) ParseArgs(args []string) (command int, err error) {
 	// Environments
 	if os.Getenv("NOVASSH_COMMAND") != "" {
 		c.SshCommand = os.Getenv("NOVASSH_COMMAND")
@@ -52,8 +59,12 @@ func (c *Config) ParseArgs(args []string) (exitWithHelp bool, err error) {
 			i++
 			c.SshCommand = args[i]
 
+		} else if arg == "--novassh-list" {
+			// List instances
+			command = CMD_LIST
+
 		} else if arg == "--help" {
-			sshargs = []string{}
+			command = CMD_HELP
 			break
 
 		} else {
@@ -67,13 +78,13 @@ func (c *Config) ParseArgs(args []string) (exitWithHelp bool, err error) {
 		c.SshCommand = DEFAULT_SSH_COMMAND
 	}
 
-	// Any SSH args was not provided.
-	if len(sshargs) == 0 {
-		help()
-		return true, nil
-	}
+	//
+	if command == CMD_HELP || command == CMD_LIST {
+		return command, nil
 
-	return false, c.parseSshArgs(sshargs)
+	} else {
+		return CMD_SSH, c.parseSshArgs(sshargs)
+	}
 }
 
 func (c *Config) parseSshArgs(args []string) (err error) {
@@ -140,25 +151,4 @@ func (c *Config) resolveMachineName(nova *nova, arg string) (found bool, err err
 		log.Debugf("No match: name=%s", instancename)
 		return false, nil
 	}
-}
-
-func help() {
-	fmt.Fprintf(os.Stdout, `NAME:
-	%s - The ssh wrapper program to connect OpenStack instance(nova) with the instance name.
-
-USAGE:
-	%s [ssh-options] user@hostname [comamnd]
-
-VERSION:
-	%s
-
-OPTIONS:
-	--novassh-command: Specify SSH command (default: "ssh").
-	--novassh-debug:   output some debug messages.
-	--help:            print this message.
-
-ENVIRONMENTS:
-	NOVASSH_COMMAND: Specify SSH command (default: "ssh").
-
-`, APPNAME, APPNAME, VERSION)
 }

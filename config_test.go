@@ -10,7 +10,7 @@ func TestInstanceName(t *testing.T) {
 	n := NewNova()
 	n.Init()
 
-	machines, _ := n.listMachines()
+	machines, _ := n.List()
 	if len(machines) == 0 {
 		t.Skipf("No machines found. Skip this test.")
 	}
@@ -32,9 +32,9 @@ func TestParseArgs1(t *testing.T) {
 		configTestInstance.Name,
 	}
 
-	exitWithHelp, err := c.ParseArgs(args)
-	if exitWithHelp {
-		t.Errorf("'exitWithHelp' flag should be false")
+	cmd, err := c.ParseArgs(args)
+	if cmd != CMD_SSH {
+		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
 
 	} else if err != nil {
 		t.Errorf("%v", err)
@@ -63,9 +63,9 @@ func TestParseArgs2(t *testing.T) {
 		"root@" + configTestInstance.Name,
 	}
 
-	exitWithHelp, err := c.ParseArgs(args)
-	if exitWithHelp {
-		t.Errorf("'exitWithHelp' flag should be false")
+	cmd, err := c.ParseArgs(args)
+	if cmd != CMD_SSH {
+		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
 
 	} else if err != nil {
 		t.Errorf("%v", err)
@@ -95,9 +95,9 @@ func TestParseArgs3(t *testing.T) {
 		"test-command",
 	}
 
-	exitWithHelp, err := c.ParseArgs(args)
-	if exitWithHelp {
-		t.Errorf("'exitWithHelp' flag should be false")
+	cmd, err := c.ParseArgs(args)
+	if cmd != CMD_SSH {
+		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
 
 	} else if err != nil {
 		t.Errorf("%v", err)
@@ -129,9 +129,9 @@ func TestParseArgs4(t *testing.T) {
 		configTestInstance.Name,
 	}
 
-	exitWithHelp, err := c.ParseArgs(args)
-	if exitWithHelp {
-		t.Errorf("'exitWithHelp' flag should be false")
+	cmd, err := c.ParseArgs(args)
+	if cmd != CMD_SSH {
+		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
 
 	} else if err != nil {
 		t.Errorf("%v", err)

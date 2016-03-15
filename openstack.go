@@ -165,7 +165,7 @@ AUTH:
 
 func (n *nova) Find(name string) (m *machine, err error) {
 	if n.machines == nil {
-		n.machines, err = n.listMachines()
+		n.machines, err = n.List()
 		if err != nil {
 			return nil, err
 		}
@@ -180,7 +180,7 @@ func (n *nova) Find(name string) (m *machine, err error) {
 	return nil, nil
 }
 
-func (n *nova) listMachines() ([]*machine, error) {
+func (n *nova) List() ([]*machine, error) {
 	pager := servers.List(n.provider, servers.ListOpts{})
 
 	machines := []*machine{}

@@ -55,7 +55,7 @@ func TestFind(t *testing.T) {
 	n := NewNova()
 	n.Init()
 
-	machines, err := n.listMachines()
+	machines, err := n.List()
 	if err != nil {
 		t.Errorf("%v", err)
 

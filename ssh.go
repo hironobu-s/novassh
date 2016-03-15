@@ -11,7 +11,7 @@ type Ssh struct {
 	config Config
 }
 
-func (s *Ssh) Run() {
+func (s *Ssh) Run() error {
 	var server string
 	if s.config.SshUser != "" {
 		server += s.config.SshUser + "@"
@@ -25,5 +25,5 @@ func (s *Ssh) Run() {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	cmd.Run()
+	return cmd.Run()
 }
