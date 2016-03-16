@@ -1,0 +1,9 @@
+language: go
+
+go:
+
+before_install:
+  - go get github.com/hironobu-s/novassh/...
+
+script:
+  - make test
