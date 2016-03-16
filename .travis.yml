@@ -1,7 +1,6 @@
 language: go
 
 go:
-  - tip
 
 before_install:
   - go get github.com/hironobu-s/novassh/...
