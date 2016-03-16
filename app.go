@@ -31,6 +31,11 @@ func main() {
 			goto ERROR
 		}
 
+	case CMD_DEAUTH:
+		if err = deauth(c); err != nil {
+			goto ERROR
+		}
+
 	default:
 		log.Errorf("Undefined command: %s", cmd)
 		goto ERROR
@@ -98,4 +103,9 @@ ENVIRONMENTS:
 	NOVASSH_COMMAND: Specify SSH command (default: "ssh").
 
 `, APPNAME, APPNAME, VERSION)
+}
+
+func deauth(c Config) error {
+	nova := NewNova()
+	return nova.RemoveCredentialCache()
 }

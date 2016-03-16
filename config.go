@@ -19,6 +19,7 @@ const (
 	CMD_HELP = iota + 1
 	CMD_LIST
 	CMD_SSH
+	CMD_DEAUTH
 )
 
 type Config struct {
@@ -63,11 +64,16 @@ func (c *Config) ParseArgs(args []string) (command int, err error) {
 			// List instances
 			command = CMD_LIST
 
+		} else if arg == "--novassh-deauth" {
+			// Remove credential cache
+			command = CMD_DEAUTH
+
 		} else if arg == "--help" {
 			command = CMD_HELP
 			break
 
 		} else {
+			command = CMD_SSH
 			sshargs = append(sshargs, arg)
 		}
 		i++
@@ -83,11 +89,10 @@ func (c *Config) ParseArgs(args []string) (command int, err error) {
 		command = CMD_HELP
 	}
 
-	if command == CMD_HELP || command == CMD_LIST {
-		return command, nil
-
-	} else {
+	if command == CMD_SSH {
 		return CMD_SSH, c.parseSshArgs(sshargs)
+	} else {
+		return command, nil
 	}
 }
 

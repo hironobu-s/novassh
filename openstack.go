@@ -213,3 +213,7 @@ func (n *nova) credentialCachePath() string {
 		return CREDENTIAL_FILE
 	}
 }
+
+func (n *nova) RemoveCredentialCache() error {
+	return os.Remove(n.credentialCachePath())
+}
