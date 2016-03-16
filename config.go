@@ -68,7 +68,7 @@ func (c *Config) ParseArgs(args []string) (command int, err error) {
 			// Remove credential cache
 			command = CMD_DEAUTH
 
-		} else if arg == "--help" {
+		} else if arg == "--novassh-help" {
 			command = CMD_HELP
 			break
 
