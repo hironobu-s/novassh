@@ -88,7 +88,7 @@ func help(c Config) {
 	%s - The ssh wrapper program to connect OpenStack instance(nova) with the instance name.
 
 USAGE:
-	%s [ssh-options] user@hostname [comamnd]
+	%s [ssh-options] user@instance-name [comamnd]
 
 VERSION:
 	%s
