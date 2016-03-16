@@ -22,12 +22,12 @@ func main() {
 		help(c)
 
 	case CMD_LIST:
-		if list(c) != nil {
+		if err = list(c); err != nil {
 			goto ERROR
 		}
 
 	case CMD_SSH:
-		if ssh(c) != nil {
+		if err = ssh(c); err != nil {
 			goto ERROR
 		}
 
