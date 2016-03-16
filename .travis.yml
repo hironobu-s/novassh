@@ -1,0 +1,11 @@
+language: go
+
+go:
+  - tip
+
+before_install:
+  - go get github.com/hironobu-s/novassh/...
+  - gox -build-toolchain -osarch="darwin/amd64 linux/amd64 windows/amd64"
+
+script:
+  - make test
