@@ -71,3 +71,16 @@ func TestFind(t *testing.T) {
 		t.Errorf("Find() did not return the server: name=%s", machines[0].Name)
 	}
 }
+
+func TestFind2(t *testing.T) {
+	n := NewNova()
+	n.Init()
+
+	ss, err := n.Find("undefinded-instance-name")
+	if err != nil {
+		t.Errorf("%v", err)
+
+	} else if ss != nil {
+		t.Errorf("Find() should return 'nil'")
+	}
+}
