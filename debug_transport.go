@@ -6,10 +6,18 @@ import (
 	log "github.com/Sirupsen/logrus"
 )
 
+var __default_transport http.RoundTripper
+
 func enableDebugTransport() {
+	__default_transport = http.DefaultTransport
+
 	http.DefaultTransport = &DebugTransport{
 		Transport: http.DefaultTransport,
 	}
+}
+
+func disableDebugTransport() {
+	http.DefaultTransport = __default_transport
 }
 
 type DebugTransport struct {

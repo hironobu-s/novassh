@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"os"
 	"testing"
+
+	"github.com/Sirupsen/logrus"
 )
 
 var configTestInstance *machine
@@ -167,7 +170,12 @@ func TestList(t *testing.T) {
 		"--novassh-list",
 	}
 
-	c := &Config{Args: args}
+	c := &Config{
+		Stdout: new(bytes.Buffer),
+		Stdin:  nil,
+		Stderr: nil,
+		Args:   args,
+	}
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_LIST {
 		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
@@ -201,9 +209,18 @@ func TestDebug(t *testing.T) {
 		"--novassh-debug",
 	}
 
-	c := &Config{Args: args}
+	c := &Config{
+		Stdout: new(bytes.Buffer),
+		Stdin:  nil,
+		Stderr: nil,
+		Args:   args,
+	}
 	_, err := c.ParseArgs()
 	if err != nil {
 		t.Errorf("%v", err)
 	}
+
+	// disable debug
+	disableDebugTransport()
+	logrus.SetLevel(logrus.InfoLevel)
 }
