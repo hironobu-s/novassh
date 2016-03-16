@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os"
 	"testing"
 )
 
@@ -26,13 +27,12 @@ func TestParseArgs1(t *testing.T) {
 		t.Skipf("No servers found. Skip this test.")
 	}
 
-	c := &Config{}
-
 	args := []string{
 		configTestInstance.Name,
 	}
 
-	cmd, err := c.ParseArgs(args)
+	c := &Config{Args: args}
+	cmd, err := c.ParseArgs()
 	if cmd != CMD_SSH {
 		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
 
@@ -57,13 +57,12 @@ func TestParseArgs2(t *testing.T) {
 		t.Skipf("No servers found. Skip this test.")
 	}
 
-	c := &Config{}
-
 	args := []string{
 		"root@" + configTestInstance.Name,
 	}
 
-	cmd, err := c.ParseArgs(args)
+	c := &Config{Args: args}
+	cmd, err := c.ParseArgs()
 	if cmd != CMD_SSH {
 		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
 
@@ -88,14 +87,13 @@ func TestParseArgs3(t *testing.T) {
 		t.Skipf("No servers found. Skip this test.")
 	}
 
-	c := &Config{}
-
 	args := []string{
 		"root@" + configTestInstance.Name,
 		"test-command",
 	}
 
-	cmd, err := c.ParseArgs(args)
+	c := &Config{Args: args}
+	cmd, err := c.ParseArgs()
 	if cmd != CMD_SSH {
 		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
 
@@ -120,8 +118,6 @@ func TestParseArgs4(t *testing.T) {
 		t.Skipf("No servers found. Skip this test.")
 	}
 
-	c := &Config{}
-
 	args := []string{
 		// Port fowarding option for ssh
 		"-L",
@@ -129,7 +125,8 @@ func TestParseArgs4(t *testing.T) {
 		configTestInstance.Name,
 	}
 
-	cmd, err := c.ParseArgs(args)
+	c := &Config{Args: args}
+	cmd, err := c.ParseArgs()
 	if cmd != CMD_SSH {
 		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
 
@@ -148,5 +145,65 @@ func TestParseArgs4(t *testing.T) {
 	}
 	if c.SshRemoteCommand != "" {
 		t.Errorf("remote-command is not match: %v", c)
+	}
+}
+
+func TestHelp(t *testing.T) {
+	args := []string{
+		"--novassh-help",
+	}
+
+	c := &Config{Args: args}
+	cmd, err := c.ParseArgs()
+	if cmd != CMD_HELP {
+		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+	} else if err != nil {
+		t.Errorf("%v", err)
+	}
+}
+
+func TestList(t *testing.T) {
+	args := []string{
+		"--novassh-list",
+	}
+
+	c := &Config{Args: args}
+	cmd, err := c.ParseArgs()
+	if cmd != CMD_LIST {
+		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+	} else if err != nil {
+		t.Errorf("%v", err)
+	}
+}
+
+func TestDeauth(t *testing.T) {
+	args := []string{
+		"--novassh-deauth",
+	}
+
+	c := &Config{Args: args}
+	cmd, err := c.ParseArgs()
+	if cmd != CMD_DEAUTH {
+		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+	} else if err != nil {
+		t.Errorf("%v", err)
+	}
+
+	nova := NewNova()
+	_, err = os.Stat(nova.credentialCachePath())
+	if err != nil {
+		t.Errorf("Credential cache file sill exists")
+	}
+}
+
+func TestDebug(t *testing.T) {
+	args := []string{
+		"--novassh-debug",
+	}
+
+	c := &Config{Args: args}
+	_, err := c.ParseArgs()
+	if err != nil {
+		t.Errorf("%v", err)
 	}
 }
