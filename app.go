@@ -100,6 +100,8 @@ OPTIONS:
 	--novassh-list:    Display instances.
 	--novassh-help:            Print this message.
 
+    Any other options from novassh will pass to the SSH command.
+
 ENVIRONMENTS:
 	NOVASSH_COMMAND: Specify SSH command (default: "ssh").
 
