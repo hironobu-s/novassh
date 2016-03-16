@@ -26,7 +26,9 @@ curl -sL https://github.com/hironobu-s/novassh/releases/download/current/novassh
 
 # How to use.
 
-### 1. Set authentication information to the environment variables.
+### 1. Authentication
+
+Set the authentication information to environment variables.
 
 ```shell
 export OS_USERNAME=[username]
