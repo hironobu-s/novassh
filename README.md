@@ -6,7 +6,7 @@ This is an SSH wrapper program to connect OpenStack(Nova) instance with the inst
 
 Download an executable binary from GitHub release.
 
-**Mac OSX **
+**Mac OSX**
 
 ```shell
 curl -sL https://github.com/hironobu-s/novassh/releases/download/current/novassh-osx.amd64.gz | zcat > novassh && chmod +x ./novassh
