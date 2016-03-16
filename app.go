@@ -94,9 +94,10 @@ VERSION:
 	%s
 
 OPTIONS:
-	--novassh-list:    Display instances.
 	--novassh-command: Specify SSH command (default: "ssh").
+	--novassh-deauth:  Remove credential cache.
 	--novassh-debug:   Output some debug messages.
+	--novassh-list:    Display instances.
 	--help:            Print this message.
 
 ENVIRONMENTS:
