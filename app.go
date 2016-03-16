@@ -58,6 +58,11 @@ func list(c Config) error {
 		return err
 	}
 
+	if len(machines) == 0 {
+		fmt.Fprintf(os.Stdout, "No servers found.\n")
+		return nil
+	}
+
 	width := 0
 	for _, m := range machines {
 		if len(m.Name) > width {

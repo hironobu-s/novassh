@@ -40,15 +40,11 @@ func newMachine(s servers.Server) (*machine, error) {
 		}
 	}
 
-	// Detecting public IP address for connectiong SSH
+	// Detect public IP address for connectiong SSH
 	for name, addressSet := range s.Addresses {
-		if name == "public" {
-			// Response of rackspace API has the key either "public" or "private"
-
-			// TODO: Rackspace API and other OpenStack Systems
-
-		} else if strings.HasPrefix(name, "ext-") {
-			// Response of ConoHa API has the prefix either "ext-" or "local-"
+		// Response of Rackspace API has the key either "public" or "private".
+		// Response of ConoHa API has the prefix either "ext-" or "local-"
+		if name == "public" || strings.HasPrefix(name, "ext-") {
 			as, ok := addressSet.([]interface{})
 			if !ok {
 				return nil, fmt.Errorf("Invalid address set(type assertion failed).")
