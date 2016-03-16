@@ -118,11 +118,11 @@ func (c *Config) parseSshArgs(args []string) (err error) {
 		if len(args) > 1 {
 			c.SshRemoteCommand = strings.Join(args[pos+1:], " ")
 		}
-		log.Debugf("The machine is found: ipaddr=%s, args=%v command=%s", c.SshHost, c.SshOptions, c.SshRemoteCommand)
+		log.Debugf("The server is found: ipaddr=%s, args=%v command=%s", c.SshHost, c.SshOptions, c.SshRemoteCommand)
 		return nil
 
 	} else {
-		return fmt.Errorf("Could not found the machine.")
+		return fmt.Errorf("Could not found the server.")
 	}
 }
 
@@ -137,7 +137,7 @@ func (c *Config) resolveMachineName(nova *nova, arg string) (found bool, err err
 		instancename = arg
 	}
 
-	log.Debugf("Try to find the machine: instance-name=%s", instancename)
+	log.Debugf("Try to find the server: instance-name=%s", instancename)
 
 	machine, err := nova.Find(instancename)
 	if err != nil {
