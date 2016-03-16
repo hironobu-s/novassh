@@ -142,6 +142,9 @@ AUTH:
 
 	// Set service client
 	n.provider, err = openstack.NewComputeV2(client, eo)
+	if n.provider == nil {
+		return fmt.Errorf("Could not found the Compute endpoint")
+	}
 
 	// Store credential to cache file
 	cred := &Credential{
