@@ -1,7 +1,14 @@
 # novassh [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE) [![Build Status](https://travis-ci.org/hironobu-s/novassh.svg?branch=master)](https://travis-ci.org/hironobu-s/novassh) [![codebeat badge](https://codebeat.co/badges/97e0e868-2796-41d9-82a1-d1740acdc4d3)](https://codebeat.co/projects/github-com-hironobu-s-novassh)
 
+# Overview
 
-This is an SSH wrapper program to connect OpenStack(Nova) instance with the instance name.
+An SSH wrapper program that connect to OpenStack(Nova) instance with the instance name, instead of Hostname or IP Address.
+
+**novassh** has been tested on the following environments.
+
+* Rackspace https://www.rackspace.com/
+* ConoHa https://www.conoha.jp/
+* My OpenStack environment(Liberty)
 
 # Install
 
@@ -26,7 +33,7 @@ curl -sL https://github.com/hironobu-s/novassh/releases/download/current/novassh
 
 # How to use.
 
-### 1. Authentication
+### 1. Authentication.
 
 Set the authentication information to environment variables.
 
@@ -50,13 +57,13 @@ novassh --novassh-list
 
 ### 3. Connect to the instance.
 
-You can connect to it with the instance name instead of Hostname or IP Address.
+You can use in the same way as SSH does.
 
 ```shell
 novassh username@instance-name
 ```
 
-And you can also use novassh with some options for SSH command.
+And can also use it with some options for SSH command.
 
 ```shell
 novassh -L 8080:internal-host:8080 username@instance-name
@@ -80,7 +87,8 @@ ENVIRONMENTS:
 
 ## Credential cache
 
-novassh saves your authentication information such as username, password, tenant-id to the cache file(~/.novassh) in order to reduce the connection for the Identity service(Keystone). You can use ```--novassh-deauth``` option to remove it. 
+**novassh** saves your authentication information such as username, password, tenant-id to the cache file(~/.novassh) in order to reduce the connection for the Identity service(Keystone). You can use ```--novassh-deauth``` option to remove it. 
+
 
 ## Author
 
