@@ -9,10 +9,19 @@ import (
 )
 
 func main() {
+	c := Config{
+		Stdout: os.Stdout,
+		Stdin:  os.Stdin,
+		Stderr: os.Stderr,
+		Args:   os.Args[1:],
+	}
+	os.Exit(run(c))
+}
+
+func run(c Config) (exitcode int) {
 	var err error
 
-	c := Config{}
-	cmd, err := c.ParseArgs(os.Args[1:])
+	cmd, err := c.ParseArgs()
 	if err != nil {
 		goto ERROR
 	}
@@ -40,11 +49,11 @@ func main() {
 		log.Errorf("Undefined command: %s", cmd)
 		goto ERROR
 	}
-	os.Exit(0)
+	return 0
 
 ERROR:
 	log.Errorf("%v", err)
-	os.Exit(1)
+	return 1
 }
 
 func ssh(c Config) error {
@@ -76,15 +85,15 @@ func list(c Config) error {
 	}
 
 	format := "%" + strconv.Itoa(-width) + "s %s\n"
-	fmt.Fprintf(os.Stdout, format, "[Name]", "[IP Address]")
+	fmt.Fprintf(c.Stdout, format, "[Name]", "[IP Address]")
 	for _, m := range machines {
-		fmt.Fprintf(os.Stdout, format, m.Name, m.Ipaddr)
+		fmt.Fprintf(c.Stdout, format, m.Name, m.Ipaddr)
 	}
 	return nil
 }
 
 func help(c Config) {
-	fmt.Fprintf(os.Stdout, `NAME:
+	fmt.Fprintf(c.Stdout, `NAME:
 	%s - The ssh wrapper program to connect OpenStack instance(nova) with the instance name.
 
 USAGE:

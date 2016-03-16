@@ -5,6 +5,8 @@ import (
 	"os"
 	"strings"
 
+	"io"
+
 	log "github.com/Sirupsen/logrus"
 )
 
@@ -23,6 +25,14 @@ const (
 )
 
 type Config struct {
+	// Outputs
+	Stdout io.Writer
+	Stdin  io.Reader
+	Stderr io.Writer
+
+	// Arguments
+	Args []string
+
 	// Executable name of SSH
 	SshCommand string
 
@@ -39,7 +49,7 @@ type Config struct {
 	SshRemoteCommand string
 }
 
-func (c *Config) ParseArgs(args []string) (command int, err error) {
+func (c *Config) ParseArgs() (command int, err error) {
 	// Environments
 	if os.Getenv("NOVASSH_COMMAND") != "" {
 		c.SshCommand = os.Getenv("NOVASSH_COMMAND")
@@ -48,8 +58,8 @@ func (c *Config) ParseArgs(args []string) (command int, err error) {
 	// Aeguments
 	i := 0
 	sshargs := []string{}
-	for i < len(args) {
-		arg := args[i]
+	for i < len(c.Args) {
+		arg := c.Args[i]
 		if arg == "--novassh-debug" {
 			// Enable debug
 			log.SetLevel(log.DebugLevel)
@@ -58,7 +68,7 @@ func (c *Config) ParseArgs(args []string) (command int, err error) {
 		} else if arg == "--novassh-command" {
 			// Detects SSH command
 			i++
-			c.SshCommand = args[i]
+			c.SshCommand = c.Args[i]
 
 		} else if arg == "--novassh-list" {
 			// List instances
