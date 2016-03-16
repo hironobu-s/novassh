@@ -171,7 +171,7 @@ func (n *nova) Find(name string) (m *machine, err error) {
 	}
 
 	for _, machine := range n.machines {
-		if machine.Name == name {
+		if strings.ToLower(machine.Name) == strings.ToLower(name) {
 			return machine, nil
 		}
 	}
