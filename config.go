@@ -78,7 +78,11 @@ func (c *Config) ParseArgs(args []string) (command int, err error) {
 		c.SshCommand = DEFAULT_SSH_COMMAND
 	}
 
-	//
+	// Display help if no arguments are given
+	if command == 0 && len(sshargs) == 0 {
+		command = CMD_HELP
+	}
+
 	if command == CMD_HELP || command == CMD_LIST {
 		return command, nil
 
