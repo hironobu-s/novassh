@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"strings"
-
-	"io"
 
 	log "github.com/Sirupsen/logrus"
 )
