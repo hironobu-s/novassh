@@ -23,6 +23,46 @@ const (
 	CMD_DEAUTH
 )
 
+type Command int
+
+func (c *Command) String() string {
+	switch *c {
+	case CMD_HELP:
+		return "HELP"
+	case CMD_LIST:
+		return "LIST"
+	case CMD_SSH:
+		return "SSH"
+	case CMD_DEAUTH:
+		return "DEAUTH"
+	default:
+		return "UNKNOWN"
+	}
+}
+
+// Connection types
+const (
+	// Use SSH(default)
+	CON_SSH = iota + 1
+
+	// Use serial console via websocket
+	CON_CONSOLE
+)
+
+type ConnType int
+
+func (c *ConnType) String() string {
+	switch *c {
+	case CON_SSH:
+		return "SSH"
+	case CON_CONSOLE:
+		return "CONSOLE"
+	default:
+		return "UNKNOWN"
+	}
+}
+
+// Config
 type Config struct {
 	// Outputs
 	Stdout io.Writer
@@ -31,6 +71,9 @@ type Config struct {
 
 	// Arguments
 	Args []string
+
+	// Connection type
+	ConnType ConnType
 
 	// Executable name of SSH
 	SshCommand string
@@ -46,13 +89,20 @@ type Config struct {
 
 	// Command-name to be run on the instance
 	SshRemoteCommand string
+
+	// Websocket URL (For TYPE_CONSOLE only)
+	ConsoleUrl string
 }
 
-func (c *Config) ParseArgs() (command int, err error) {
+func (c *Config) ParseArgs() (command Command, err error) {
 	// Environments
 	if os.Getenv("NOVASSH_COMMAND") != "" {
 		c.SshCommand = os.Getenv("NOVASSH_COMMAND")
 	}
+
+	// Defaults
+	c.SshCommand = DEFAULT_SSH_COMMAND
+	c.ConnType = CON_SSH
 
 	// Aeguments
 	i := 0
@@ -81,6 +131,10 @@ func (c *Config) ParseArgs() (command int, err error) {
 			command = CMD_HELP
 			break
 
+		} else if arg == "--novassh-console" {
+			// Use serial console
+			c.ConnType = CON_CONSOLE
+
 		} else {
 			command = CMD_SSH
 			sshargs = append(sshargs, arg)
@@ -88,15 +142,13 @@ func (c *Config) ParseArgs() (command int, err error) {
 		i++
 	}
 
-	// Set default SSH command if not set
-	if c.SshCommand == "" {
-		c.SshCommand = DEFAULT_SSH_COMMAND
-	}
-
 	// Display help if no arguments are given
 	if command == 0 && len(sshargs) == 0 {
 		command = CMD_HELP
 	}
+
+	log.Debugf("The server is found: ipaddr=%s, args=%v command=%s", c.SshHost, c.SshOptions, c.SshRemoteCommand)
+	log.Debugf("Command: %s", command.String())
 
 	if command == CMD_SSH {
 		return CMD_SSH, c.parseSshArgs(sshargs)
@@ -162,6 +214,16 @@ func (c *Config) resolveMachineName(nova *nova, arg string) (found bool, err err
 		// Found
 		c.SshHost = machine.Ipaddr
 		c.SshUser = user
+
+		// Set console url if type is CON_CONSOLE
+		if c.ConnType == CON_CONSOLE {
+			url, err := nova.GetConsoleUrl(machine)
+			if err != nil {
+				return true, err
+			}
+			c.ConsoleUrl = url
+		}
+
 		return true, nil
 
 	} else {

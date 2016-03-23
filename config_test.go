@@ -38,7 +38,12 @@ func TestParseArgs1(t *testing.T) {
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_SSH {
 		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+	} else if err != nil {
+		t.Errorf("%v", err)
+	}
 
+	if c.ConnType != CON_SSH {
+		t.Errorf("ConnType should be CON_SSH: type=%d", c.ConnType)
 	} else if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -68,7 +73,12 @@ func TestParseArgs2(t *testing.T) {
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_SSH {
 		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+	} else if err != nil {
+		t.Errorf("%v", err)
+	}
 
+	if c.ConnType != CON_SSH {
+		t.Errorf("ConnType should be CON_SSH: type=%d", c.ConnType)
 	} else if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -99,7 +109,12 @@ func TestParseArgs3(t *testing.T) {
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_SSH {
 		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+	} else if err != nil {
+		t.Errorf("%v", err)
+	}
 
+	if c.ConnType != CON_SSH {
+		t.Errorf("ConnType should be CON_SSH: type=%d", c.ConnType)
 	} else if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -132,7 +147,12 @@ func TestParseArgs4(t *testing.T) {
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_SSH {
 		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+	} else if err != nil {
+		t.Errorf("%v", err)
+	}
 
+	if c.ConnType != CON_SSH {
+		t.Errorf("ConnType should be CON_SSH: type=%d", c.ConnType)
 	} else if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -223,4 +243,19 @@ func TestDebug(t *testing.T) {
 	// disable debug
 	disableDebugTransport()
 	logrus.SetLevel(logrus.InfoLevel)
+}
+
+func TestConsole(t *testing.T) {
+	args := []string{
+		"--novassh-console",
+		configTestInstance.Name,
+	}
+
+	c := &Config{Args: args}
+	_, err := c.ParseArgs()
+	if c.ConnType != CON_CONSOLE {
+		t.Errorf("ConnType should be CON_CONSOLE: type=%d", c.ConnType)
+	} else if err != nil {
+		t.Errorf("%v", err)
+	}
 }

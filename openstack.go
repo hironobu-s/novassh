@@ -26,11 +26,13 @@ const (
 type machine struct {
 	Name   string
 	Ipaddr string
+	Uuid   string
 }
 
 func newMachine(s servers.Server) (*machine, error) {
 	m := &machine{
 		Name: s.Name,
+		Uuid: s.ID,
 	}
 
 	// For ConoHa
@@ -108,12 +110,13 @@ func (n *nova) Init() (err error) {
 		}
 
 		cred := &Credential{Token: &tokens.Token{}}
+
 		if err = json.Unmarshal(strdata, cred); err != nil {
 			log.Warnf("Failed to unmarchal the cache data: %v", err)
 			goto AUTH
 		}
 
-		if time.Now().Before(cred.ExpiresAt) {
+		if cred.ExpiresAt.After(time.Now()) {
 			log.Debugf("Token has expired. Try to reauth.")
 			goto AUTH
 		}
@@ -203,6 +206,41 @@ func (n *nova) List() ([]*machine, error) {
 	})
 
 	return machines, nil
+}
+
+func (n *nova) GetConsoleUrl(m *machine) (string, error) {
+	url := n.provider.ServiceURL("servers", m.Uuid, "action")
+
+	data := map[string]interface{}{
+		"os-getSerialConsole": map[string]string{
+			"type": "serial",
+		},
+	}
+
+	type Response struct {
+		Console struct {
+			Type string `json:"type"`
+			Url  string `json:"url"`
+		} `json:"console"`
+	}
+
+	var res interface{}
+	res = &Response{}
+
+	opts := &gophercloud.RequestOpts{
+		OkCodes:      []int{200, 201},
+		JSONResponse: res,
+	}
+	_, err := n.provider.Post(url, data, &res, opts)
+	if err != nil {
+		return "", err
+	}
+
+	response, ok := res.(*Response)
+	if !ok {
+		return "", fmt.Errorf("interface conversion error")
+	}
+	return response.Console.Url, nil
 }
 
 func (n *nova) credentialCachePath() string {

@@ -27,6 +27,8 @@ type DebugTransport struct {
 func (t *DebugTransport) RoundTrip(req *http.Request) (resp *http.Response, err error) {
 	log.Debugf("Send    ==>: %s %s", req.Method, req.URL)
 
+	log.Debugf("%v", req.Header)
+
 	resp, err = t.Transport.RoundTrip(req)
 	if err != nil {
 		return resp, err

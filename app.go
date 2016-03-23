@@ -57,7 +57,7 @@ ERROR:
 }
 
 func ssh(c Config) error {
-	ssh := &Ssh{config: c}
+	ssh := &Connect{config: c}
 	return ssh.Run()
 }
 
