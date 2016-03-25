@@ -2,7 +2,7 @@
 
 # Overview
 
-An SSH wrapper program that connect to OpenStack(Nova) instance with the instance name, instead of Hostname or IP Address.
+NovaConnect is a client program for your OpenStack(Nova) instance. You can connect to it with the instance name instead of Hostname or IP Address via SSH or serial console access.
 
 **novassh** has been tested on the following environments.
 
@@ -55,31 +55,42 @@ Use ``--novassh-list`` option.
 novassh --novassh-list
 ```
 
-### 3. Connect to the instance.
+### 3-1. SSH connection
 
-You can use in the same way as SSH does.
+You can use novassh in the same way as SSH does.
 
 ```shell
 novassh username@instance-name
 ```
 
-And can also use it with some options for SSH command.
+All options that does not have "--novassh" prefix are passed to SSH command.
 
 ```shell
 novassh -L 8080:internal-host:8080 username@instance-name
 ```
+
+### 3-2. Serial Console Connection
+
+OpenStack is support for serial console access to your instance since version Juno. You can use --novassh-console option to access your instance via serial console.
+
+```shell
+novassh --novassh-console username@instance-name
+```
+
+Type ```"Ctrl+[ q"``` to disconnect.
 
 ## Options
 
 ```
 OPTIONS:
 	--novassh-command: Specify SSH command (default: "ssh").
+    --novassh-console: Use an serial console connection instead of SSH.
 	--novassh-deauth:  Remove credential cache.
 	--novassh-debug:   Output some debug messages.
 	--novassh-list:    Display instances.
-	--novassh-help:            Print this message.
+	--novassh-help:    Print this message.
 
-    Any other options from novassh will pass to the SSH command.
+    Any other options will pass to SSH command.
 
 ENVIRONMENTS:
 	NOVASSH_COMMAND: Specify SSH command (default: "ssh").
