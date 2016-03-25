@@ -36,8 +36,8 @@ func TestParseArgs1(t *testing.T) {
 
 	c := &Config{Args: args}
 	cmd, err := c.ParseArgs()
-	if cmd != CMD_SSH {
-		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+	if cmd != CMD_CONNECT {
+		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
 	} else if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -71,8 +71,8 @@ func TestParseArgs2(t *testing.T) {
 
 	c := &Config{Args: args}
 	cmd, err := c.ParseArgs()
-	if cmd != CMD_SSH {
-		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+	if cmd != CMD_CONNECT {
+		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
 	} else if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -107,8 +107,8 @@ func TestParseArgs3(t *testing.T) {
 
 	c := &Config{Args: args}
 	cmd, err := c.ParseArgs()
-	if cmd != CMD_SSH {
-		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+	if cmd != CMD_CONNECT {
+		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
 	} else if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -145,8 +145,8 @@ func TestParseArgs4(t *testing.T) {
 
 	c := &Config{Args: args}
 	cmd, err := c.ParseArgs()
-	if cmd != CMD_SSH {
-		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+	if cmd != CMD_CONNECT {
+		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
 	} else if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -179,7 +179,7 @@ func TestHelp(t *testing.T) {
 	c := &Config{Args: args}
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_HELP {
-		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
 	} else if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -198,7 +198,7 @@ func TestList(t *testing.T) {
 	}
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_LIST {
-		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
 	} else if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -212,7 +212,7 @@ func TestDeauth(t *testing.T) {
 	c := &Config{Args: args}
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_DEAUTH {
-		t.Errorf("Command should be CMD_SSH: command=%d", cmd)
+		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
 	} else if err != nil {
 		t.Errorf("%v", err)
 	}
@@ -246,6 +246,10 @@ func TestDebug(t *testing.T) {
 }
 
 func TestConsole(t *testing.T) {
+	if configTestInstance == nil {
+		t.Skipf("No servers found. Skip this test.")
+	}
+
 	args := []string{
 		"--novassh-console",
 		configTestInstance.Name,
