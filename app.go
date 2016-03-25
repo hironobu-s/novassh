@@ -35,8 +35,8 @@ func run(c Config) (exitcode int) {
 			goto ERROR
 		}
 
-	case CMD_SSH:
-		if err = ssh(c); err != nil {
+	case CMD_CONNECT:
+		if err = connect(c); err != nil {
 			goto ERROR
 		}
 
@@ -56,9 +56,9 @@ ERROR:
 	return 1
 }
 
-func ssh(c Config) error {
-	ssh := &Connect{config: c}
-	return ssh.Run()
+func connect(c Config) error {
+	con := &Connect{config: c}
+	return con.Run()
 }
 
 func list(c Config) error {

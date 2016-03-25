@@ -19,7 +19,7 @@ const (
 const (
 	CMD_HELP = iota + 1
 	CMD_LIST
-	CMD_SSH
+	CMD_CONNECT
 	CMD_DEAUTH
 )
 
@@ -31,7 +31,7 @@ func (c *Command) String() string {
 		return "HELP"
 	case CMD_LIST:
 		return "LIST"
-	case CMD_SSH:
+	case CMD_CONNECT:
 		return "SSH"
 	case CMD_DEAUTH:
 		return "DEAUTH"
@@ -136,7 +136,7 @@ func (c *Config) ParseArgs() (command Command, err error) {
 			c.ConnType = CON_CONSOLE
 
 		} else {
-			command = CMD_SSH
+			command = CMD_CONNECT
 			sshargs = append(sshargs, arg)
 		}
 		i++
@@ -150,8 +150,8 @@ func (c *Config) ParseArgs() (command Command, err error) {
 	log.Debugf("The server is found: ipaddr=%s, args=%v command=%s", c.SshHost, c.SshOptions, c.SshRemoteCommand)
 	log.Debugf("Command: %s", command.String())
 
-	if command == CMD_SSH {
-		return CMD_SSH, c.parseSshArgs(sshargs)
+	if command == CMD_CONNECT {
+		return CMD_CONNECT, c.parseSshArgs(sshargs)
 	} else {
 		return command, nil
 	}
