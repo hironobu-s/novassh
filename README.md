@@ -2,9 +2,9 @@
 
 # Overview
 
-NovaConnect is a client program for your OpenStack(Nova) instance. You can connect to it with the instance name instead of Hostname or IP Address via SSH or serial console access.
+**novassh** is a client program for OpenStack(Nova). You can connect to your instance with the instance name instead of Hostname or IP Address via SSH, and also support for a serial console access.
 
-**novassh** has been tested on the following environments.
+It has been tested on the following environments.
 
 * Rackspace https://www.rackspace.com/
 * ConoHa https://www.conoha.jp/
