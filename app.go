@@ -103,13 +103,13 @@ VERSION:
 	%s
 
 OPTIONS:
-	--novassh-authcache: Store credentials to the cache file ($HOME/.novassh).
-	--novassh-command:   Specify SSH command (default: "ssh").
-	--novassh-console:   Use an serial console connection instead of SSH.
-	--novassh-deauth:    Remove credential cache.
-	--novassh-debug:     Output some debug messages.
-	--novassh-list:      Display instances.
-	--novassh-help:      Print this message.
+	--authcache: Store credentials to the cache file ($HOME/.novassh).
+	--command:   Specify SSH command (default: "ssh").
+	--console:   Use an serial console connection instead of SSH.
+	--deauth:    Remove credential cache.
+	--debug:     Output some debug messages.
+	--list:      Display instances.
+	--help:      Print this message.
 
     Any other options from novassh will pass to the SSH command.
 

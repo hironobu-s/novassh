@@ -12,7 +12,7 @@ import (
 const (
 	DEFAULT_SSH_COMMAND = "ssh"
 	APPNAME             = "novassh"
-	VERSION             = "0.2.1"
+	VERSION             = "0.2.2"
 )
 
 // Commands
@@ -113,33 +113,33 @@ func (c *Config) ParseArgs() (command Command, err error) {
 	sshargs := []string{}
 	for i < len(c.Args) {
 		arg := c.Args[i]
-		if arg == "--novassh-debug" {
+		if arg == "--debug" {
 			// Enable debug
 			log.SetLevel(log.DebugLevel)
 			enableDebugTransport()
 
-		} else if arg == "--novassh-command" {
+		} else if arg == "--command" {
 			// Detects SSH command
 			i++
 			c.SshCommand = c.Args[i]
 
-		} else if arg == "--novassh-list" {
+		} else if arg == "--list" {
 			// List instances
 			command = CMD_LIST
 
-		} else if arg == "--novassh-authcache" {
+		} else if arg == "--authcache" {
 			// Authentication cache
 			c.AuthCache = true
 
-		} else if arg == "--novassh-deauth" {
+		} else if arg == "--deauth" {
 			// Remove credential cache
 			command = CMD_DEAUTH
 
-		} else if arg == "--novassh-help" {
+		} else if arg == "--help" {
 			command = CMD_HELP
 			break
 
-		} else if arg == "--novassh-console" {
+		} else if arg == "--console" {
 			// Use serial console
 			c.ConnType = CON_CONSOLE
 

@@ -172,7 +172,7 @@ func TestParseArgs4(t *testing.T) {
 
 func TestHelp(t *testing.T) {
 	args := []string{
-		"--novassh-help",
+		"--help",
 	}
 
 	c := Config{Args: args}
@@ -186,7 +186,7 @@ func TestHelp(t *testing.T) {
 
 func TestList(t *testing.T) {
 	args := []string{
-		"--novassh-list",
+		"--list",
 	}
 
 	c := Config{
@@ -205,7 +205,7 @@ func TestList(t *testing.T) {
 
 func TestDeauth(t *testing.T) {
 	args := []string{
-		"--novassh-deauth",
+		"--deauth",
 	}
 
 	c := Config{Args: args}
@@ -219,7 +219,7 @@ func TestDeauth(t *testing.T) {
 
 func TestDebug(t *testing.T) {
 	args := []string{
-		"--novassh-debug",
+		"--debug",
 	}
 
 	c := Config{
@@ -244,7 +244,7 @@ func TestConsole(t *testing.T) {
 	}
 
 	args := []string{
-		"--novassh-console",
+		"--console",
 		configTestInstance.Name,
 	}
 

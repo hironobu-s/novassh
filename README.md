@@ -49,10 +49,10 @@ See also: https://wiki.openstack.org/wiki/OpenStackClient/Authentication
 
 ### 2. Show instance list.
 
-Use ``--novassh-list`` option.
+Use ``--list`` option.
 
 ```
-novassh --novassh-list
+novassh --list
 ```
 
 ### 3-1. SSH connection
@@ -71,10 +71,10 @@ novassh -L 8080:internal-host:8080 username@instance-name
 
 ### 3-2. Serial Console Connection
 
-OpenStack is support for serial console access to your instance since version Juno. You can use --novassh-console option to access your instance via serial console.
+OpenStack is support for serial console access to your instance since version Juno. You can use --console option to access your instance via serial console.
 
 ```shell
-novassh --novassh-console username@instance-name
+novassh --console username@instance-name
 ```
 
 Type ```"Ctrl+[ q"``` to disconnect.
@@ -83,13 +83,13 @@ Type ```"Ctrl+[ q"``` to disconnect.
 
 ```
 OPTIONS:
-	--novassh-authcache: Store credentials to the cache file ($HOME/.novassh).
-	--novassh-command:   Specify SSH command (default: "ssh").
-	--novassh-console:   Use an serial console connection instead of SSH.
-	--novassh-deauth:    Remove credential cache.
-	--novassh-debug:     Output some debug messages.
-	--novassh-list:      Display instances.
-	--novassh-help:      Print this message.
+	--authcache: Store credentials to the cache file ($HOME/.novassh).
+	--command:   Specify SSH command (default: "ssh").
+	--console:   Use an serial console connection instead of SSH.
+	--deauth:    Remove credential cache.
+	--debug:     Output some debug messages.
+	--list:      Display instances.
+	--help:      Print this message.
 
     Any other options will pass to SSH command.
 
@@ -99,7 +99,7 @@ ENVIRONMENTS:
 
 ## Credential cache
 
-**novassh** saves your authentication information such as username, password, tenant-id to the cache file(~/.novassh) in order to reduce the connection for the Identity service(Keystone). You can use ```--novassh-deauth``` option to remove it. 
+**novassh** saves your authentication information such as username, password, tenant-id to the cache file(~/.novassh) in order to reduce the connection for the Identity service(Keystone). You can use ```--deauth``` option to remove it. 
 
 
 ## Author

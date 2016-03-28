@@ -8,7 +8,7 @@ import (
 
 func TestRunHelp(t *testing.T) {
 	args := []string{
-		"--novassh-help",
+		"--help",
 	}
 
 	c := Config{
@@ -26,7 +26,7 @@ func TestRunHelp(t *testing.T) {
 
 func TestRunList(t *testing.T) {
 	args := []string{
-		"--novassh-list",
+		"--list",
 	}
 
 	c := Config{
@@ -43,7 +43,7 @@ func TestRunList(t *testing.T) {
 
 func TestRunDeauth(t *testing.T) {
 	args := []string{
-		"--novassh-deauth",
+		"--deauth",
 	}
 	c := Config{
 		Stdout: new(bytes.Buffer),
