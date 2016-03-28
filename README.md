@@ -55,12 +55,27 @@ Use ``--list`` option.
 novassh --list
 ```
 
+Output
+
+```
+[Name]       [IP Address]
+hironobu-dev 133.130.***.***
+go-build     133.130.***.***
+test-app1    133.130.***.***
+```
+
 ### 3-1. SSH Connection
 
 You can use novassh in the same way as SSH does.
 
 ```shell
 novassh username@instance-name
+```
+
+For example.
+
+```shell
+novassh hiro@hironobu-dev
 ```
 
 All options are passed to SSH command.
