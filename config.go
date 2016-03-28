@@ -155,7 +155,6 @@ func (c *Config) ParseArgs() (command Command, err error) {
 		command = CMD_HELP
 	}
 
-	log.Debugf("The server is found: ipaddr=%s, args=%v command=%s", c.SshHost, c.SshOptions, c.SshRemoteCommand)
 	log.Debugf("Command: %s", command.String())
 
 	if command == CMD_CONNECT {
@@ -192,7 +191,6 @@ func (c *Config) parseSshArgs(args []string) (err error) {
 		if len(args) > 1 {
 			c.SshRemoteCommand = strings.Join(args[pos+1:], " ")
 		}
-		log.Debugf("The server is found: ipaddr=%s, args=%v command=%s", c.SshHost, c.SshOptions, c.SshRemoteCommand)
 		return nil
 
 	} else {
