@@ -111,7 +111,7 @@ OPTIONS:
 	--list:      Display instances.
 	--help:      Print this message.
 
-    Any other options from novassh will pass to the SSH command.
+    Any other options will pass to the SSH command.
 
 ENVIRONMENTS:
 	NOVASSH_COMMAND: Specify SSH command (default: "ssh").
