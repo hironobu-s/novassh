@@ -55,7 +55,7 @@ Use ``--list`` option.
 novassh --list
 ```
 
-### 3-1. SSH connection
+### 3-1. SSH Connection
 
 You can use novassh in the same way as SSH does.
 
@@ -97,7 +97,7 @@ ENVIRONMENTS:
 	NOVASSH_COMMAND: Specify SSH command (default: "ssh").
 ```
 
-## Credential cache
+## Credential Cache
 
 **novassh** always sends an authentication request to Identity Service(Keystone). To reduce the connections, you may use ```--authcache``` option that save your credentials such as username, password, tenant-id, etc., in the cache file(~/.novassh). It will connect to your instance more quickly.
 
