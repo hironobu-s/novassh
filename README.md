@@ -63,7 +63,7 @@ You can use novassh in the same way as SSH does.
 novassh username@instance-name
 ```
 
-All options that does not have "--novassh" prefix are passed to SSH command.
+All options are passed to SSH command.
 
 ```shell
 novassh -L 8080:internal-host:8080 username@instance-name
@@ -71,7 +71,7 @@ novassh -L 8080:internal-host:8080 username@instance-name
 
 ### 3-2. Serial Console Connection
 
-OpenStack is support for serial console access to your instance since version Juno. You can use --console option to access your instance via serial console.
+You can use ```--console``` option to access your instance via serial console. (OpenStack has supported for serial console access to your instance since version Juno.)
 
 ```shell
 novassh --console username@instance-name
@@ -99,8 +99,9 @@ ENVIRONMENTS:
 
 ## Credential cache
 
-**novassh** saves your authentication information such as username, password, tenant-id to the cache file(~/.novassh) in order to reduce the connection for the Identity service(Keystone). You can use ```--deauth``` option to remove it. 
+**novassh** always sends an authentication request to Identity Service(Keystone). To reduce the connections, you may use ```--authcache``` option that save your credentials such as username, password, tenant-id, etc., in the cache file(~/.novassh). It will connect to your instance more quickly.
 
+If you need to connect to other OpenStack environment, you may use ```--deauth``` option to remove the cache file.
 
 ## Author
 
