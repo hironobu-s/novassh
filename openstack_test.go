@@ -24,7 +24,7 @@ func TestInitAndCache(t *testing.T) {
 	os.Remove(n.credentialCachePath())
 
 	// Init
-	if err = n.Init(); err != nil {
+	if err = n.Init(true); err != nil {
 		t.Errorf("%v", err)
 	}
 
@@ -46,14 +46,14 @@ func TestInitAndCache2(t *testing.T) {
 	n := NewNova()
 
 	// Init() uses it instead of authenticating
-	if err := n.Init(); err != nil {
+	if err := n.Init(false); err != nil {
 		t.Errorf("%v", err)
 	}
 }
 
 func TestFind(t *testing.T) {
 	n := NewNova()
-	n.Init()
+	n.Init(false)
 
 	machines, err := n.List()
 	if err != nil {
@@ -74,7 +74,7 @@ func TestFind(t *testing.T) {
 
 func TestFind2(t *testing.T) {
 	n := NewNova()
-	n.Init()
+	n.Init(false)
 
 	ss, err := n.Find("undefinded-instance-name")
 	if err != nil {

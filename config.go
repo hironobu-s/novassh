@@ -12,7 +12,7 @@ import (
 const (
 	DEFAULT_SSH_COMMAND = "ssh"
 	APPNAME             = "novassh"
-	VERSION             = "0.2"
+	VERSION             = "0.2.1"
 )
 
 // Commands
@@ -92,6 +92,9 @@ type Config struct {
 
 	// Websocket URL (For TYPE_CONSOLE only)
 	ConsoleUrl string
+
+	// Authentication cache (Default: false)
+	AuthCache bool
 }
 
 func (c *Config) ParseArgs() (command Command, err error) {
@@ -103,6 +106,7 @@ func (c *Config) ParseArgs() (command Command, err error) {
 	// Defaults
 	c.SshCommand = DEFAULT_SSH_COMMAND
 	c.ConnType = CON_SSH
+	c.AuthCache = false
 
 	// Aeguments
 	i := 0
@@ -122,6 +126,10 @@ func (c *Config) ParseArgs() (command Command, err error) {
 		} else if arg == "--novassh-list" {
 			// List instances
 			command = CMD_LIST
+
+		} else if arg == "--novassh-authcache" {
+			// Authentication cache
+			c.AuthCache = true
 
 		} else if arg == "--novassh-deauth" {
 			// Remove credential cache
@@ -159,7 +167,7 @@ func (c *Config) ParseArgs() (command Command, err error) {
 
 func (c *Config) parseSshArgs(args []string) (err error) {
 	nova := NewNova()
-	if err := nova.Init(); err != nil {
+	if err := nova.Init(c.AuthCache); err != nil {
 		return err
 	}
 

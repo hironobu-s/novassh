@@ -86,7 +86,7 @@ func NewNova() *nova {
 	return nova
 }
 
-func (n *nova) Init() (err error) {
+func (n *nova) Init(authcache bool) (err error) {
 	// Credentials from env
 	opts, err := openstack.AuthOptionsFromEnv()
 	if err != nil {
@@ -146,22 +146,23 @@ AUTH:
 	}
 
 	// Store credential to cache file
-	cred := &Credential{
-		ComputeEndpoint: n.provider.Endpoint,
-		Token: &tokens.Token{
-			ID:        client.TokenID,
-			ExpiresAt: time.Now(),
-		},
-	}
-	strdata, err := json.Marshal(cred)
-	if err != nil {
-		return err
-	}
+	if authcache {
+		cred := &Credential{
+			ComputeEndpoint: n.provider.Endpoint,
+			Token: &tokens.Token{
+				ID:        client.TokenID,
+				ExpiresAt: time.Now(),
+			},
+		}
+		strdata, err := json.Marshal(cred)
+		if err != nil {
+			return err
+		}
 
-	if err = ioutil.WriteFile(n.credentialCachePath(), strdata, CREDENTIAL_FILE_MODE); err != nil {
-		log.Warnf("Can not write the credential cache file: %s", n.credentialCachePath())
+		if err = ioutil.WriteFile(n.credentialCachePath(), strdata, CREDENTIAL_FILE_MODE); err != nil {
+			log.Warnf("Can not write the credential cache file: %s", n.credentialCachePath())
+		}
 	}
-
 	return nil
 }
 
@@ -253,5 +254,10 @@ func (n *nova) credentialCachePath() string {
 }
 
 func (n *nova) RemoveCredentialCache() error {
-	return os.Remove(n.credentialCachePath())
+	_, err := os.Stat(n.credentialCachePath())
+	if err == nil {
+		return os.Remove(n.credentialCachePath())
+	} else {
+		return nil
+	}
 }

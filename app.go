@@ -63,7 +63,7 @@ func connect(c Config) error {
 
 func list(c Config) error {
 	nova := NewNova()
-	if err := nova.Init(); err != nil {
+	if err := nova.Init(c.AuthCache); err != nil {
 		return err
 	}
 

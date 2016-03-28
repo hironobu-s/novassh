@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"os"
 	"testing"
 )
 
@@ -54,5 +55,11 @@ func TestRunDeauth(t *testing.T) {
 	code := run(c)
 	if code != 0 {
 		t.Errorf("failure exit code: %d", code)
+	}
+
+	nova := NewNova()
+	_, err := os.Stat(nova.credentialCachePath())
+	if err == nil {
+		t.Errorf("Credential cache file sill exists")
 	}
 }

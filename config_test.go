@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"os"
 	"testing"
 
 	"github.com/Sirupsen/logrus"
@@ -12,7 +11,7 @@ var configTestInstance *machine
 
 func TestInstanceName(t *testing.T) {
 	n := NewNova()
-	n.Init()
+	n.Init(false)
 
 	machines, _ := n.List()
 	if len(machines) == 0 {
@@ -34,7 +33,7 @@ func TestParseArgs1(t *testing.T) {
 		configTestInstance.Name,
 	}
 
-	c := &Config{Args: args}
+	c := Config{Args: args}
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_CONNECT {
 		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
@@ -69,7 +68,7 @@ func TestParseArgs2(t *testing.T) {
 		"root@" + configTestInstance.Name,
 	}
 
-	c := &Config{Args: args}
+	c := Config{Args: args}
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_CONNECT {
 		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
@@ -105,7 +104,7 @@ func TestParseArgs3(t *testing.T) {
 		"test-command",
 	}
 
-	c := &Config{Args: args}
+	c := Config{Args: args}
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_CONNECT {
 		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
@@ -143,7 +142,7 @@ func TestParseArgs4(t *testing.T) {
 		configTestInstance.Name,
 	}
 
-	c := &Config{Args: args}
+	c := Config{Args: args}
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_CONNECT {
 		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
@@ -176,7 +175,7 @@ func TestHelp(t *testing.T) {
 		"--novassh-help",
 	}
 
-	c := &Config{Args: args}
+	c := Config{Args: args}
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_HELP {
 		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
@@ -190,7 +189,7 @@ func TestList(t *testing.T) {
 		"--novassh-list",
 	}
 
-	c := &Config{
+	c := Config{
 		Stdout: new(bytes.Buffer),
 		Stdin:  nil,
 		Stderr: nil,
@@ -209,18 +208,12 @@ func TestDeauth(t *testing.T) {
 		"--novassh-deauth",
 	}
 
-	c := &Config{Args: args}
+	c := Config{Args: args}
 	cmd, err := c.ParseArgs()
 	if cmd != CMD_DEAUTH {
 		t.Errorf("Command should be CMD_CONNECT: command=%d", cmd)
 	} else if err != nil {
 		t.Errorf("%v", err)
-	}
-
-	nova := NewNova()
-	_, err = os.Stat(nova.credentialCachePath())
-	if err != nil {
-		t.Errorf("Credential cache file sill exists")
 	}
 }
 
@@ -229,7 +222,7 @@ func TestDebug(t *testing.T) {
 		"--novassh-debug",
 	}
 
-	c := &Config{
+	c := Config{
 		Stdout: new(bytes.Buffer),
 		Stdin:  nil,
 		Stderr: nil,
@@ -255,7 +248,7 @@ func TestConsole(t *testing.T) {
 		configTestInstance.Name,
 	}
 
-	c := &Config{Args: args}
+	c := Config{Args: args}
 	_, err := c.ParseArgs()
 	if c.ConnType != CON_CONSOLE {
 		t.Errorf("ConnType should be CON_CONSOLE: type=%d", c.ConnType)
