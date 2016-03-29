@@ -42,7 +42,11 @@ func newMachine(s servers.Server) (*machine, error) {
 		}
 	}
 
+	//
 	// Detect public IP address for connectiong SSH
+	//
+
+	// Try to detect any public IP addresses
 	for name, addressSet := range s.Addresses {
 		// Response of Rackspace API has the key either "public" or "private".
 		// Response of ConoHa API has the prefix either "ext-" or "local-"
@@ -61,10 +65,50 @@ func newMachine(s servers.Server) (*machine, error) {
 				// TODO: support IPv6 address
 				if addr["version"] == 4.0 {
 					m.Ipaddr = addr["addr"].(string)
+					goto DETECTED
 				}
 			}
 		}
 	}
+
+	// Try to detect any private floating IP address.
+	for name, addressSet := range s.Addresses {
+		if name == "private" {
+			as, ok := addressSet.([]interface{})
+			if !ok {
+				return nil, fmt.Errorf("Invalid address set(type assertion failed).")
+			}
+
+			for _, v := range as {
+				addr, ok := v.(map[string]interface{})
+				if !ok {
+					return nil, fmt.Errorf("Invalid address set(type assertion failed).")
+				}
+
+				if addr["OS-EXT-IPS:type"] == "floating" {
+					m.Ipaddr = addr["addr"].(string)
+					goto DETECTED
+				}
+			}
+		}
+	}
+
+	// Choose the first one when we can not detect.
+	for _, addressSet := range s.Addresses {
+		as, ok := addressSet.([]interface{})
+		if !ok {
+			return nil, fmt.Errorf("Invalid address set(type assertion failed).")
+		}
+
+		addr, ok := as[0].(map[string]interface{})
+		if !ok {
+			return nil, fmt.Errorf("Invalid address set(type assertion failed).")
+		}
+		m.Ipaddr = addr["addr"].(string)
+		goto DETECTED
+	}
+
+DETECTED:
 
 	return m, nil
 }
