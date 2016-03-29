@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"testing"
 
+	"strings"
+
 	"github.com/Sirupsen/logrus"
 )
 
@@ -253,6 +255,10 @@ func TestConsole(t *testing.T) {
 	if c.ConnType != CON_CONSOLE {
 		t.Errorf("ConnType should be CON_CONSOLE: type=%d", c.ConnType)
 	} else if err != nil {
+		msg := err.Error()
+		if strings.Index(msg, "Unavailable console type serial") >= 0 {
+			t.Skip("Sserial console is not supported.")
+		}
 		t.Errorf("%v", err)
 	}
 }
