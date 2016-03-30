@@ -1,6 +1,7 @@
 NAME=novassh
 BINDIR=bin
 GOARCH=amd64
+GOFLAGS=-ldflags '-s -w'
 
 all: clean linux darwin windows
 
