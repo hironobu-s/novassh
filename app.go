@@ -84,7 +84,7 @@ func list(c Config) error {
 		}
 	}
 
-	format := "%" + strconv.Itoa(-width) + "s %s\n"
+	format := "%" + strconv.Itoa(-width) + "s\t%s\n"
 	fmt.Fprintf(c.Stdout, format, "[Name]", "[IP Address]")
 	for _, m := range machines {
 		fmt.Fprintf(c.Stdout, format, m.Name, m.Ipaddr)
