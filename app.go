@@ -94,7 +94,7 @@ func list(c Config) error {
 
 func help(c Config) {
 	fmt.Fprintf(c.Stdout, `NAME:
-	%s - The ssh wrapper program to connect OpenStack instance(nova) with the instance name.
+	%s - A client program for OpenStack(Nova) that connect to your instance with the instance name.
 
 USAGE:
 	%s [ssh-options] user@instance-name [comamnd]
