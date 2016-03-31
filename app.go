@@ -73,7 +73,7 @@ func list(c Config) error {
 	}
 
 	if len(machines) == 0 {
-		fmt.Fprintf(os.Stdout, "No server found.\n")
+		fmt.Fprintf(os.Stdout, "No servers found.\n")
 		return nil
 	}
 
