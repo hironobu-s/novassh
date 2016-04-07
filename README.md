@@ -33,6 +33,15 @@ curl -sL https://github.com/hironobu-s/novassh/releases/download/current/novassh
 
 [ZIP file](https://github.com/hironobu-s/novassh/releases/download/current/novassh.amd64.zip)
 
+# Run in docker
+
+You can run **novassh** inside a container.
+
+```
+docker run -ti --rm hironobu/novassh novassh
+```
+
+See https://hub.docker.com/r/hironobu/novassh/
 
 # How to use.
 
