@@ -4,8 +4,6 @@
 
 **novassh** is a client program for OpenStack(Nova). You can connect to your instance with the instance name instead of Hostname or IP Address via SSH, and also support for a serial console access.
 
-<a href="https://asciinema.org/a/40809?autoplay=1" target="_blank"><img src="https://asciinema.org/a/40809.png" width="589"/></a>
-
 It has been tested on the following environments.
 
 * Rackspace https://www.rackspace.com/
