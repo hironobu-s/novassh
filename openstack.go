@@ -256,36 +256,47 @@ func (n *nova) List() ([]*machine, error) {
 }
 
 func (n *nova) GetConsoleUrl(m *machine) (string, error) {
-	url := n.provider.ServiceURL("servers", m.Uuid, "action")
-
-	data := map[string]interface{}{
+	data, err := json.Marshal(map[string]interface{}{
 		"os-getSerialConsole": map[string]string{
 			"type": "serial",
 		},
+	})
+	if err != nil {
+		return "", err
 	}
 
-	type Response struct {
+	url := n.provider.ServiceURL("servers", m.Uuid, "action")
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(data))
+	if err != nil {
+		return "", err
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	for k, v := range n.provider.AuthenticatedHeaders() {
+		req.Header.Set(k, v)
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	var response struct {
 		Console struct {
 			Type string `json:"type"`
 			Url  string `json:"url"`
 		} `json:"console"`
 	}
 
-	var res interface{}
-	res = &Response{}
-
-	opts := &gophercloud.RequestOpts{
-		OkCodes:      []int{200, 201},
-		JSONResponse: res,
-	}
-	_, err := n.provider.Post(url, data, &res, opts)
-	if err != nil {
+	if err := json.Unmarshal(body, &response); err != nil {
 		return "", err
-	}
-
-	response, ok := res.(*Response)
-	if !ok {
-		return "", fmt.Errorf("interface conversion error")
 	}
 	return response.Console.Url, nil
 }
