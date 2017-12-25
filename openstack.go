@@ -1,21 +1,23 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/mitchellh/go-homedir"
 	"github.com/rackspace/gophercloud"
 	"github.com/rackspace/gophercloud/openstack"
 	"github.com/rackspace/gophercloud/openstack/compute/v2/servers"
 	"github.com/rackspace/gophercloud/openstack/identity/v2/tokens"
 	"github.com/rackspace/gophercloud/pagination"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
