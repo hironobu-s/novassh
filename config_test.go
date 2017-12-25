@@ -2,11 +2,10 @@ package main
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 
-	"strings"
-
-	"github.com/Sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 var configTestInstance *machine
