@@ -104,6 +104,25 @@ novassh --console username@instance-name
 
 Type ```"Ctrl+[ q"``` to disconnect.
 
+### 3-3. Debug output
+
+You can use ```--debug``` option to figure out the problems.
+
+```
+DEBU[0000] Command: LIST
+DEBU[0000] Send    ==>: POST https://identity.tyo1.conoha.io/v2.0/tokens
+DEBU[0000] map[Content-Type:[application/json] Accept:[application/json]]
+DEBU[0000] Receive <==: 200 https://identity.tyo1.conoha.io/v2.0/tokens (size=2541)
+DEBU[0000] Send    ==>: GET https://compute.tyo1.conoha.io/v2/####################################/servers/detail
+DEBU[0000] map[X-Auth-Token:[XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX] Accept:[application/json]]
+DEBU[0001] Receive <==: 200 https://compute.tyo1.conoha.io/v2/####################################/servers/detail (size=2302)
+DEBU[0001] Machine found: name=example-vm-name, ipaddr=150.95.0.0
+DEBU[0001] InterfaceName: ext-150-95-0-0-1
+DEBU[0001] InterfaceName: local-gnct47070904-1
+[Name]                  [IP Address]
+example-vm-name         150.95.0.0
+```
+
 ## Options
 
 ```
@@ -120,6 +139,7 @@ OPTIONS:
 
 ENVIRONMENTS:
 	NOVASSH_COMMAND: Specify SSH command (default: "ssh").
+	NOVASSH_INTERFACE: Specify network interface of instance (default: blank strings which means the auto detection).
 ```
 
 ## Credential Cache
