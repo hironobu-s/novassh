@@ -11,7 +11,7 @@ import (
 var configTestInstance *machine
 
 func TestInstanceName(t *testing.T) {
-	n := NewNova()
+	n := NewNova("")
 	n.Init(false)
 
 	machines, _ := n.List()

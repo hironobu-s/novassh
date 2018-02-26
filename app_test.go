@@ -57,7 +57,7 @@ func TestRunDeauth(t *testing.T) {
 		t.Errorf("failure exit code: %d", code)
 	}
 
-	nova := NewNova()
+	nova := NewNova("")
 	_, err := os.Stat(nova.credentialCachePath())
 	if err == nil {
 		t.Errorf("Credential cache file sill exists")

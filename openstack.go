@@ -31,7 +31,7 @@ type machine struct {
 	Uuid   string
 }
 
-func newMachine(s servers.Server) (*machine, error) {
+func newMachine(s servers.Server, interfaceName string) (*machine, error) {
 	m := &machine{
 		Name: s.Name,
 		Uuid: s.ID,
@@ -52,7 +52,7 @@ func newMachine(s servers.Server) (*machine, error) {
 	for name, addressSet := range s.Addresses {
 		// Response of Rackspace API has the key either "public" or "private".
 		// Response of ConoHa API has the prefix either "ext-" or "local-"
-		if name == "public" || strings.HasPrefix(name, "ext-") {
+		if name == "public" || strings.HasPrefix(name, "ext-") || name == interfaceName {
 			as, ok := addressSet.([]interface{})
 			if !ok {
 				return nil, fmt.Errorf("Invalid address set(type assertion failed).")
@@ -116,8 +116,9 @@ DETECTED:
 }
 
 type nova struct {
-	machines []*machine
-	provider *gophercloud.ServiceClient
+	machines         []*machine
+	provider         *gophercloud.ServiceClient
+	networkInterface string
 }
 
 type Credential struct {
@@ -125,9 +126,10 @@ type Credential struct {
 	*tokens.Token
 }
 
-func NewNova() *nova {
+func NewNova(nicname string) *nova {
 	nova := &nova{
-		machines: nil,
+		networkInterface: nicname,
+		machines:         nil,
 	}
 	return nova
 }
@@ -240,11 +242,14 @@ func (n *nova) List() ([]*machine, error) {
 		}
 
 		for _, s := range ss {
-			m, err := newMachine(s)
+			m, err := newMachine(s, n.networkInterface)
 			if err != nil {
 				return false, err
 			}
-			log.Debugf("Machine is found: name=%s, ipaddr=%s", m.Name, m.Ipaddr)
+			log.Debugf("Machine found: name=%s, ipaddr=%s", m.Name, m.Ipaddr)
+			for name, _ := range s.Addresses {
+				log.Debugf("InterfaceName: %s", name)
+			}
 
 			machines = append(machines, m)
 		}

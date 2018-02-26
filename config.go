@@ -12,7 +12,7 @@ import (
 const (
 	DEFAULT_SSH_COMMAND = "ssh"
 	APPNAME             = "novassh"
-	VERSION             = "0.2.5"
+	VERSION             = "0.2.6"
 )
 
 // Commands
@@ -75,6 +75,9 @@ type Config struct {
 	// Connection type
 	ConnType ConnType
 
+	// Name of a network interface
+	NetworkInterface string
+
 	// Executable name of SSH
 	SshCommand string
 
@@ -101,6 +104,9 @@ func (c *Config) ParseArgs() (command Command, err error) {
 	// Environments
 	if os.Getenv("NOVASSH_COMMAND") != "" {
 		c.SshCommand = os.Getenv("NOVASSH_COMMAND")
+	}
+	if os.Getenv("NOVASSH_INTERFACE") != "" {
+		c.NetworkInterface = os.Getenv("NOVASSH_INTERFACE")
 	}
 
 	// Defaults
@@ -165,7 +171,7 @@ func (c *Config) ParseArgs() (command Command, err error) {
 }
 
 func (c *Config) parseSshArgs(args []string) (err error) {
-	nova := NewNova()
+	nova := NewNova(c.NetworkInterface)
 	if err := nova.Init(c.AuthCache); err != nil {
 		return err
 	}

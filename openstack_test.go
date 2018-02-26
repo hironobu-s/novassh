@@ -10,7 +10,7 @@ import (
 )
 
 func TestNewNova(t *testing.T) {
-	n := NewNova()
+	n := NewNova("")
 	if n.machines != nil {
 		t.Errorf("'servers' attribute is not nil")
 	}
@@ -18,7 +18,7 @@ func TestNewNova(t *testing.T) {
 
 func TestInitAndCache(t *testing.T) {
 	var err error
-	n := NewNova()
+	n := NewNova("")
 
 	// Remove credential cache file
 	os.Remove(n.credentialCachePath())
@@ -43,7 +43,7 @@ func TestInitAndCache(t *testing.T) {
 
 func TestInitAndCache2(t *testing.T) {
 	// NOTE: Credential cache file has already created by previous test
-	n := NewNova()
+	n := NewNova("")
 
 	// Init() uses it instead of authenticating
 	if err := n.Init(false); err != nil {
@@ -52,7 +52,7 @@ func TestInitAndCache2(t *testing.T) {
 }
 
 func TestFind(t *testing.T) {
-	n := NewNova()
+	n := NewNova("")
 	n.Init(false)
 
 	machines, err := n.List()
@@ -73,7 +73,7 @@ func TestFind(t *testing.T) {
 }
 
 func TestFind2(t *testing.T) {
-	n := NewNova()
+	n := NewNova("")
 	n.Init(false)
 
 	ss, err := n.Find("undefinded-instance-name")

@@ -62,7 +62,7 @@ func connect(c Config) error {
 }
 
 func list(c Config) error {
-	nova := NewNova()
+	nova := NewNova(c.NetworkInterface)
 	if err := nova.Init(c.AuthCache); err != nil {
 		return err
 	}
@@ -114,12 +114,13 @@ OPTIONS:
     Any other options will pass to the SSH command.
 
 ENVIRONMENTS:
-	NOVASSH_COMMAND: Specify SSH command (default: "ssh").
+	NOVASSH_COMMAND:   Specify SSH command (default: "ssh").
+	NOVASSH_INTERFACE: Specify network interface of instance (default: blank strings which means the auto detection).
 
 `, APPNAME, APPNAME, VERSION)
 }
 
 func deauth(c Config) error {
-	nova := NewNova()
+	nova := NewNova(c.NetworkInterface)
 	return nova.RemoveCredentialCache()
 }
